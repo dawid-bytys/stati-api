@@ -1,0 +1,33 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type LoginResponse {
+  accessToken: String!
+  refreshToken: String!
+}
+
+type RegisterResponse {
+  accessToken: String!
+  refreshToken: String!
+}
+
+type RefreshAccessToken {
+  accessToken: String!
+}
+
+type Query {
+  refreshAccessToken(refreshToken: String!): RefreshAccessToken!
+  doesUserExist(email: String!): Boolean!
+}
+
+type Mutation {
+  register(email: String!, password: String!): RegisterResponse!
+  login(email: String!, password: String!): LoginResponse!
+  upsertSpotifyAuth(spdcCookie: String!, accessToken: String!, accessTokenExpirationTimestampMs: Float!): NonEmptyString!
+  addActivity(username: String!, timestampMs: Float!): NonEmptyString!
+  upsertNotificationToken(value: String!, deviceId: String!): NonEmptyString!
+}
+
+"""A string that cannot be passed as an empty value"""
+scalar NonEmptyString
