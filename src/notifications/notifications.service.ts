@@ -42,7 +42,7 @@ export class NotificationsService {
         },
       )
     } else {
-      await this.notificationsRepository.save({
+      await this.notificationsRepository.insert({
         user,
         token,
         deviceUniqueId,
