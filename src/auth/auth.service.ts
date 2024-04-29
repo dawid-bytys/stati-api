@@ -90,10 +90,7 @@ export class AuthService {
         infer: true,
       })
 
-      return this.jwtService.sign(
-        { email, type: 'access' },
-        { secret, expiresIn },
-      )
+      return this.jwtService.sign({ email }, { secret, expiresIn })
     }
 
     const secret = this.configService.get('JWT_SECRET_REFRESH', { infer: true })
