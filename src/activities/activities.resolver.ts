@@ -14,12 +14,12 @@ export class ActivitiesResolver {
   @Mutation(() => NonEmptyStringResolver)
   addActivity(
     @CurrentUser() currentUser: UserEntity,
-    @Args('username') username: string,
+    @Args('friendUri') friendUri: string,
     @Args('timestampMs') timestampMs: number,
   ): Promise<string> {
     return this.activitiesService.addActivity(
       currentUser,
-      username,
+      friendUri,
       timestampMs,
     )
   }

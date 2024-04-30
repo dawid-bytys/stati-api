@@ -26,27 +26,12 @@ export class SpotifyAuthService {
     accessToken: string,
     accessTokenExpirationTimestampMs: number,
   ): Promise<string> {
-    const existingSpotifyAuth = await this.findOne({
-      select: ['id'],
-      where: {
-        user,
+    await this.spotifyAuthRepository.upsert(
+      { user, spdcCookie, accessToken, accessTokenExpirationTimestampMs },
+      {
+        conflictPaths: ['user'],
       },
-    })
-
-    if (existingSpotifyAuth) {
-      await this.spotifyAuthRepository.update(existingSpotifyAuth.id, {
-        spdcCookie,
-        accessToken,
-        accessTokenExpirationTimestampMs,
-      })
-    } else {
-      await this.spotifyAuthRepository.insert({
-        user,
-        spdcCookie,
-        accessToken,
-        accessTokenExpirationTimestampMs,
-      })
-    }
+    )
 
     return 'success'
   }

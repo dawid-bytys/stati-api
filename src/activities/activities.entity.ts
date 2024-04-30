@@ -13,7 +13,7 @@ export class ActivityEntity {
   id: number
 
   @Column()
-  username: string
+  friendUri: string
 
   @Column({ type: 'bigint' })
   timestampMs: number

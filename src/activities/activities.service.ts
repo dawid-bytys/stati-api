@@ -27,12 +27,12 @@ export class ActivitiesService {
 
   async addActivity(
     user: UserEntity,
-    username: string,
+    friendUri: string,
     timestampMs: number,
   ): Promise<string> {
     await this.activitiesRepository.insert({
       user,
-      username,
+      friendUri,
       timestampMs,
     })
 
@@ -41,13 +41,13 @@ export class ActivitiesService {
 
   async updateActivity(
     user: UserEntity,
-    username: string,
+    friendUri: string,
     timestampMs: number,
   ): Promise<void> {
     await this.activitiesRepository.update(
       {
         user,
-        username,
+        friendUri,
       },
       {
         timestampMs,
@@ -82,7 +82,7 @@ export class ActivitiesService {
         select: ['id', 'timestampMs'],
         where: {
           user,
-          username: activity.user.name,
+          friendUri: activity.user.uri,
         },
       })
 

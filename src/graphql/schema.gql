@@ -25,7 +25,7 @@ type Mutation {
   register(email: String!, password: String!): RegisterResponse!
   login(email: String!, password: String!): LoginResponse!
   upsertSpotifyAuth(spdcCookie: String!, accessToken: String!, accessTokenExpirationTimestampMs: Float!): NonEmptyString!
-  addActivity(username: String!, timestampMs: Float!): NonEmptyString!
+  addActivity(friendUri: String!, timestampMs: Float!): NonEmptyString!
   upsertNotificationToken(value: String!, deviceId: String!): NonEmptyString!
 }
 

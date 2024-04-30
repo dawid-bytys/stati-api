@@ -17,7 +17,8 @@
     "test:cov": "jest --coverage",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "migration:generate:dev": "NODE_ENV=development ts-node -r tsconfig-paths/register node_modules/typeorm/cli.js -d src/database/data-source.ts migration:generate src/database/migrations/migration",
-    "migration:run:dev": "NODE_ENV=development ts-node -r tsconfig-paths/register node_modules/typeorm/cli.js -d src/database/data-source.ts migration:run"
+    "migration:run:dev": "NODE_ENV=development ts-node -r tsconfig-paths/register node_modules/typeorm/cli.js -d src/database/data-source.ts migration:run",
+    "migration:remove:dev": " rm src/database/migrations/*.ts"
   },
   "dependencies": {
     "@apollo/server": "^4.10.4",

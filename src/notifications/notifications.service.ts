@@ -23,33 +23,14 @@ export class NotificationsService {
     token: string,
     deviceUniqueId: string,
   ): Promise<string> {
-    const existingToken = await this.notificationsRepository.findOne({
-      select: ['id'],
-      where: {
-        user,
-        deviceUniqueId,
+    await this.notificationsRepository.upsert(
+      { user, token, deviceUniqueId },
+      {
+        conflictPaths: ['deviceUniqueId', 'user'],
       },
-    })
+    )
 
-    if (existingToken) {
-      await this.notificationsRepository.update(
-        {
-          user,
-          deviceUniqueId,
-        },
-        {
-          token,
-        },
-      )
-    } else {
-      await this.notificationsRepository.insert({
-        user,
-        token,
-        deviceUniqueId,
-      })
-    }
-
-    return 'Notification token saved'
+    return 'success'
   }
 
   async sendPushNotification(
