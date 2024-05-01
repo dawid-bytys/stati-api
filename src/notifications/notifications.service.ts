@@ -18,6 +18,10 @@ export class NotificationsService {
     })
   }
 
+  getNotificationTokens(user: UserEntity): Promise<NotificationTokenEntity[]> {
+    return this.notificationsRepository.find({ where: { user } })
+  }
+
   upsertNotificationToken(
     user: UserEntity,
     token: string,
@@ -34,11 +38,13 @@ export class NotificationsService {
   async sendPushNotification(
     user: UserEntity,
     data: NotificationData,
+    notificationTokens?: NotificationTokenEntity[],
   ): Promise<void> {
-    const tokens = await this.notificationsRepository.find({
-      select: ['id', 'token'],
-      where: { user },
-    })
+    let tokens = notificationTokens
+
+    if (tokens === undefined) {
+      tokens = await this.getNotificationTokens(user)
+    }
 
     if (tokens.length === 0) {
       return

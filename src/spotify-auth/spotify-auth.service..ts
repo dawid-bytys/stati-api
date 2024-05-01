@@ -75,7 +75,7 @@ export class SpotifyAuthService {
   @Cron('*/5 * * * * *')
   async checkAndRefreshTokens(): Promise<void> {
     const users = await this.usersService.getUsersWithFriendsAndInvalidToken()
-    await Promise.all(users.map((user) => this.refreshToken(user)))
+    await Promise.allSettled(users.map((user) => this.refreshToken(user)))
   }
 
   private async fetchAccessToken(spdcCookie: string) {

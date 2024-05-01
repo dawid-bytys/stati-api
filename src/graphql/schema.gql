@@ -16,9 +16,14 @@ type RefreshAccessToken {
   accessToken: String!
 }
 
+type ActivityDto {
+  friendUri: String!
+}
+
 type Query {
   refreshAccessToken(refreshToken: String!): RefreshAccessToken!
   doesUserExist(email: String!): Boolean!
+  getActivities: [ActivityDto!]!
 }
 
 type Mutation {
@@ -26,6 +31,7 @@ type Mutation {
   login(email: String!, password: String!): LoginResponse!
   upsertSpotifyAuth(spdcCookie: String!, accessToken: String!, accessTokenExpirationTimestampMs: Float!): NonEmptyString!
   insertActivity(friendUri: String!, timestampMs: Float!): NonEmptyString!
+  deleteActivity(friendUri: String!): NonEmptyString!
   upsertNotificationToken(token: String!, deviceUniqueId: String!): NonEmptyString!
 }
 
