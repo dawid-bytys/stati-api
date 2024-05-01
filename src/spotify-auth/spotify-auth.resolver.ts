@@ -12,18 +12,20 @@ export class SpotifyAuthResolver {
 
   @UseGuards(JwtAuthGuard)
   @Mutation(() => NonEmptyStringResolver)
-  upsertSpotifyAuth(
+  async upsertSpotifyAuth(
     @CurrentUser() user: UserEntity,
     @Args('spdcCookie') spdcCookie: string,
     @Args('accessToken') accessToken: string,
     @Args('accessTokenExpirationTimestampMs')
     accessTokenExpirationTimestampMs: number,
   ): Promise<string> {
-    return this.spotifyAuthService.upsertSpotifyAuth(
+    await this.spotifyAuthService.upsertSpotifyAuth(
       user,
       spdcCookie,
       accessToken,
       accessTokenExpirationTimestampMs,
     )
+
+    return 'success'
   }
 }

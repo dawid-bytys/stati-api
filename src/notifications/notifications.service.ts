@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import { InsertResult, Repository } from 'typeorm'
 import { NotificationTokenEntity } from './notifications.entity'
 import admin from 'firebase-admin'
 import { getMessaging } from 'firebase-admin/messaging'
@@ -18,19 +18,17 @@ export class NotificationsService {
     })
   }
 
-  async upsertNotificationToken(
+  upsertNotificationToken(
     user: UserEntity,
     token: string,
     deviceUniqueId: string,
-  ): Promise<string> {
-    await this.notificationsRepository.upsert(
+  ): Promise<InsertResult> {
+    return this.notificationsRepository.upsert(
       { user, token, deviceUniqueId },
       {
         conflictPaths: ['deviceUniqueId', 'user'],
       },
     )
-
-    return 'success'
   }
 
   async sendPushNotification(

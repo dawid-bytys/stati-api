@@ -25,8 +25,8 @@ type Mutation {
   register(email: String!, password: String!): RegisterResponse!
   login(email: String!, password: String!): LoginResponse!
   upsertSpotifyAuth(spdcCookie: String!, accessToken: String!, accessTokenExpirationTimestampMs: Float!): NonEmptyString!
-  addActivity(friendUri: String!, timestampMs: Float!): NonEmptyString!
-  upsertNotificationToken(value: String!, deviceId: String!): NonEmptyString!
+  insertActivity(friendUri: String!, timestampMs: Float!): NonEmptyString!
+  upsertNotificationToken(token: String!, deviceUniqueId: String!): NonEmptyString!
 }
 
 """A string that cannot be passed as an empty value"""

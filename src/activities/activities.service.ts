@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { UserEntity } from 'src/users/users.entity'
-import { FindOneOptions, Repository } from 'typeorm'
+import { FindOneOptions, InsertResult, Repository, UpdateResult } from 'typeorm'
 import { ActivityEntity } from './activities.entity'
 import { Cron } from '@nestjs/schedule'
 import { FriendsActivityResponse } from './activities.types'
@@ -25,26 +25,24 @@ export class ActivitiesService {
     return this.activitiesRepository.findOne(options)
   }
 
-  async addActivity(
+  insertActivity(
     user: UserEntity,
     friendUri: string,
     timestampMs: number,
-  ): Promise<string> {
-    await this.activitiesRepository.insert({
+  ): Promise<InsertResult> {
+    return this.activitiesRepository.insert({
       user,
       friendUri,
       timestampMs,
     })
-
-    return 'success'
   }
 
-  async updateActivity(
+  updateActivity(
     user: UserEntity,
     friendUri: string,
     timestampMs: number,
-  ): Promise<void> {
-    await this.activitiesRepository.update(
+  ): Promise<UpdateResult> {
+    return this.activitiesRepository.update(
       {
         user,
         friendUri,
@@ -56,12 +54,12 @@ export class ActivitiesService {
   }
 
   @Cron('*/10 * * * * *')
-  async checkAndUpdateActivities() {
+  async checkAndUpdateActivities(): Promise<void> {
     const users = await this.usersService.getUsersWithFriendsAndValidToken()
     await Promise.all(users.map((user) => this.processUserActivities(user)))
   }
 
-  private async processUserActivities(user: UserEntity) {
+  private async processUserActivities(user: UserEntity): Promise<void> {
     const spotifyAuth = await this.spotifyAuthService.findOne({
       select: ['id', 'accessToken'],
       where: {
@@ -96,7 +94,7 @@ export class ActivitiesService {
           })
         }
 
-        await this.updateActivity(user, activity.user.name, activity.timestamp)
+        await this.updateActivity(user, activity.user.uri, activity.timestamp)
       }
     }
   }

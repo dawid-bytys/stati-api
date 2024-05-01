@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { SpotifyAuthEntity } from './spotify-auth.entity'
-import { FindOneOptions, Repository } from 'typeorm'
+import { FindOneOptions, InsertResult, Repository } from 'typeorm'
 import { UserEntity } from 'src/users/users.entity'
 import { Cron } from '@nestjs/schedule'
 import { UsersService } from 'src/users/users.service'
@@ -20,20 +20,18 @@ export class SpotifyAuthService {
     return this.spotifyAuthRepository.findOne(options)
   }
 
-  async upsertSpotifyAuth(
+  upsertSpotifyAuth(
     user: UserEntity,
     spdcCookie: string,
     accessToken: string,
     accessTokenExpirationTimestampMs: number,
-  ): Promise<string> {
-    await this.spotifyAuthRepository.upsert(
+  ): Promise<InsertResult> {
+    return this.spotifyAuthRepository.upsert(
       { user, spdcCookie, accessToken, accessTokenExpirationTimestampMs },
       {
         conflictPaths: ['user'],
       },
     )
-
-    return 'success'
   }
 
   async updateAccessToken(
@@ -52,7 +50,7 @@ export class SpotifyAuthService {
     )
   }
 
-  async refreshToken(user: UserEntity) {
+  async refreshToken(user: UserEntity): Promise<void> {
     const spotifyAuth = await this.findOne({
       select: ['id', 'spdcCookie'],
       where: {
@@ -75,7 +73,7 @@ export class SpotifyAuthService {
   }
 
   @Cron('*/5 * * * * *')
-  async checkAndRefreshTokens() {
+  async checkAndRefreshTokens(): Promise<void> {
     const users = await this.usersService.getUsersWithFriendsAndInvalidToken()
     await Promise.all(users.map((user) => this.refreshToken(user)))
   }

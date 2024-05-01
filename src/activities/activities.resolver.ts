@@ -12,15 +12,17 @@ export class ActivitiesResolver {
 
   @UseGuards(JwtAuthGuard)
   @Mutation(() => NonEmptyStringResolver)
-  addActivity(
+  async insertActivity(
     @CurrentUser() currentUser: UserEntity,
     @Args('friendUri') friendUri: string,
     @Args('timestampMs') timestampMs: number,
   ): Promise<string> {
-    return this.activitiesService.addActivity(
+    await this.activitiesService.insertActivity(
       currentUser,
       friendUri,
       timestampMs,
     )
+
+    return 'success'
   }
 }

@@ -12,15 +12,17 @@ export class NotificationsResolver {
 
   @UseGuards(JwtAuthGuard)
   @Mutation(() => NonEmptyStringResolver)
-  upsertNotificationToken(
+  async upsertNotificationToken(
     @CurrentUser() currentUser: UserEntity,
-    @Args('value') value: string,
-    @Args('deviceId') deviceId: string,
+    @Args('token') value: string,
+    @Args('deviceUniqueId') deviceId: string,
   ): Promise<string> {
-    return this.notificationsService.upsertNotificationToken(
+    await this.notificationsService.upsertNotificationToken(
       currentUser,
       value,
       deviceId,
     )
+
+    return 'success'
   }
 }
