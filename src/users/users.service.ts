@@ -19,12 +19,9 @@ export class UsersService {
   }
 
   async createUser(email: string, password: string): Promise<void> {
-    const existingUser = await this.usersRepository.findOne({
-      select: ['id'],
-      where: { email },
-    })
+    const usersCount = await this.usersRepository.count({ where: { email } })
 
-    if (existingUser) {
+    if (usersCount > 0) {
       throw new ConflictException('User with this email already exists')
     }
 
@@ -32,12 +29,9 @@ export class UsersService {
   }
 
   async doesUserExist(email: string): Promise<boolean> {
-    const user = await this.usersRepository.findOne({
-      select: ['id'],
-      where: { email },
-    })
+    const usersCount = await this.usersRepository.count({ where: { email } })
 
-    return user !== null
+    return usersCount > 0
   }
 
   getUsersWithFriendsAndValidToken(): Promise<UserEntity[]> {

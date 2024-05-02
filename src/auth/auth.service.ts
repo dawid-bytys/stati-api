@@ -33,7 +33,7 @@ export class AuthService {
     }
 
     const hashedPassword = this.hashPassword(password)
-    const accessToken = this.generateToken(email, '1d')
+    const accessToken = this.generateToken(email, '3h')
     const refreshToken = this.generateToken(email)
 
     await this.usersService.createUser(email, hashedPassword)
@@ -55,7 +55,7 @@ export class AuthService {
       throw new ConflictException('Invalid password')
     }
 
-    const accessToken = this.generateToken(email, '1d')
+    const accessToken = this.generateToken(email, '3h')
     const refreshToken = this.generateToken(email)
 
     return { accessToken, refreshToken }
