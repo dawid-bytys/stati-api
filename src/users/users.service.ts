@@ -1,7 +1,7 @@
 import { UserEntity } from './users.entity'
 import { Injectable, ConflictException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { FindOneOptions, Repository } from 'typeorm'
+import { FindManyOptions, FindOneOptions, Repository } from 'typeorm'
 
 @Injectable()
 export class UsersService {
@@ -12,6 +12,10 @@ export class UsersService {
 
   findOne(options: FindOneOptions<UserEntity>): Promise<UserEntity | null> {
     return this.usersRepository.findOne(options)
+  }
+
+  count(options?: FindManyOptions<UserEntity>): Promise<number> {
+    return this.usersRepository.count(options)
   }
 
   async createUser(email: string, password: string): Promise<void> {

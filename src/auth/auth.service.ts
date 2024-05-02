@@ -26,12 +26,9 @@ export class AuthService {
     email: string,
     password: string,
   ): Promise<RegisterResponseDto> {
-    const existingUser = await this.usersService.findOne({
-      select: ['id'],
-      where: { email },
-    })
+    const usersCount = await this.usersService.count({ where: { email } })
 
-    if (existingUser) {
+    if (usersCount > 0) {
       throw new ConflictException('User with this email already exists')
     }
 
@@ -71,12 +68,9 @@ export class AuthService {
       infer: true,
     })
     const { email } = this.jwtService.verify(refreshToken, { secret })
-    const user = await this.usersService.findOne({
-      select: ['id'],
-      where: { email },
-    })
+    const usersCount = await this.usersService.count({ where: { email } })
 
-    if (!user) {
+    if (usersCount === 0) {
       throw new NotFoundException('User not found')
     }
 

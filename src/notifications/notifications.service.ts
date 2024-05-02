@@ -55,7 +55,6 @@ export class NotificationsService {
       notification: {
         title: data.title,
         body: data.body,
-        imageUrl: 'https://i.imgur.com/nnm7Pxs.png',
       },
       android: {
         priority: 'high',
